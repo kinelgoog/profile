@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0812">
+<title>Kinel — Designer & Developer</title>
+
+<style>
+:root {
+    --bg: #0b0812;
+    --panel: rgba(25, 18, 38, .64);
+    --panel-soft: rgba(255, 255, 255, .055);
+    --line: rgba(255, 255, 255, .13);
+    --text: #f8f3ff;
+    --muted: #aaa0b8;
+    --violet: #c084fc;
+    --pink: #f0abfc;
+    --radius: 30px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 320px;
+    background: var(--bg);
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "SF Pro Text", Inter, Helvetica, Arial, sans-serif;
+    background:
+        radial-gradient(850px 620px at -8% -10%, rgba(126, 34, 206, .30), transparent 68%),
+        radial-gradient(700px 560px at 108% 108%, rgba(168, 85, 247, .20), transparent 68%),
+        radial-gradient(580px 460px at 74% 28%, rgba(76, 29, 149, .18), transparent 72%),
+        var(--bg);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .18;
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse at center, black 15%, transparent 78%);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.page {
+    width: min(1180px, calc(100% - 56px));
+    min-height: 100svh;
+    margin: 0 auto;
+    padding: 28px 0 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    background: linear-gradient(145deg, #d8b4fe, #7c3aed);
+    box-shadow:
+        0 8px 24px rgba(124,58,237,.32),
+        inset 0 1px 0 rgba(255,255,255,.45);
+}
+
+.nav-meta {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.nav-meta i,
+.availability i {
+    width: 7px;
+    height: 7px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #c084fc;
+    box-shadow: 0 0 14px #c084fc;
+}
+
+.hero {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    align-items: stretch;
+    gap: 20px;
+    padding: clamp(58px, 9vh, 110px) 0;
+}
+
+.glass {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.095), transparent 35%),
+        var(--panel);
+    border-radius: var(--radius);
+    box-shadow:
+        0 28px 80px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(255,255,255,.035);
+    backdrop-filter: blur(24px) saturate(145%);
+    -webkit-backdrop-filter: blur(24px) saturate(145%);
+}
+
+.glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(115deg, rgba(255,255,255,.08), transparent 25%),
+        radial-gradient(420px 260px at 100% 0%, rgba(192,132,252,.10), transparent 70%);
+}
+
+.profile {
+    min-height: 590px;
+    padding: clamp(30px, 5vw, 54px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #d8b4fe;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.eyebrow span {
+    width: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, #c084fc, transparent);
+}
+
+.avatar-shell {
+    position: relative;
+    width: 124px;
+    height: 124px;
+    margin: 42px 0 32px;
+}
+
+.avatar-shell::before {
+    content: "";
+    position: absolute;
+    inset: -9px;
+    border: 1px solid rgba(216,180,254,.34);
+    border-radius: 39px;
+    transform: rotate(7deg);
+}
+
+.avatar-shell::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    bottom: -4px;
+    width: 15px;
+    height: 15px;
+    border: 3px solid #171020;
+    border-radius: 50%;
+    background: #c084fc;
+    box-shadow: 0 0 18px rgba(192,132,252,.9);
+}
+
+.avatar {
+    position: relative;
+    width: 124px;
+    height: 124px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 34px;
+    color: #fff;
+    font-size: 47px;
+    font-weight: 800;
+    background: linear-gradient(145deg, #d8b4fe 0%, #8b5cf6 48%, #4c1d95 100%);
+    box-shadow:
+        0 18px 42px rgba(91,33,182,.38),
+        inset 0 1px 0 rgba(255,255,255,.42);
+}
+
+.avatar span {
+    position: relative;
+    z-index: 0;
+}
+
+.avatar img {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.avatar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,.24), transparent 35%);
+}
+
+h1 {
+    max-width: 100%;
+    margin: 0;
+    font-size: clamp(4rem, 8vw, 6.9rem);
+    line-height: .82;
+    letter-spacing: -.085em;
+    font-weight: 800;
+    background: linear-gradient(120deg, #fff 8%, #f5d0fe 48%, #c4b5fd 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.role {
+    margin: 25px 0 0;
+    color: #eee5f7;
+    font-size: clamp(18px, 2vw, 22px);
+    letter-spacing: -.03em;
+}
+
+.description {
+    max-width: 390px;
+    margin: 15px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.tag {
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.105);
+    border-radius: 999px;
+    color: #d9c9e9;
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.045);
+}
+
+.profile-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 42px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.10);
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.index {
+    color: #867b95;
+    font-variant-numeric: tabular-nums;
+}
+
+.links-panel {
+    min-height: 590px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+}
+
+.links-heading {
+    padding: 15px 15px 28px;
+}
+
+.section-label {
+    color: #bd9be2;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.links-heading h2 {
+    margin: 13px 0 9px;
+    font-size: clamp(29px, 4vw, 43px);
+    line-height: 1;
+    letter-spacing: -.065em;
+}
+
+.links-heading p {
+    max-width: 370px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: auto;
+}
+
+.social {
+    --accent: #c4b5fd;
+    position: relative;
+    min-height: 174px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.105);
+    border-radius: 23px;
+    background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+    transition:
+        transform .28s ease,
+        border-color .28s ease,
+        background .28s ease,
+        box-shadow .28s ease;
+}
+
+.social::before {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -95px;
+    bottom: -105px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .10;
+    filter: blur(24px);
+    pointer-events: none;
+}
+
+.social:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent) 58%, transparent);
+    background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.035));
+    box-shadow:
+        0 16px 34px rgba(0,0,0,.22),
+        0 0 28px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.social:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.social-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.social-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    color: var(--accent);
+    background: rgba(255,255,255,.065);
+}
+
+.social-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.arrow {
+    color: #8f839d;
+    font-size: 21px;
+    line-height: 1;
+    transition: color .28s ease, transform .28s ease;
+}
+
+.social:hover .arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+}
+
+.social strong {
+    position: relative;
+    display: block;
+    margin-bottom: 7px;
+    color: #f4edf9;
+    font-size: 16px;
+    letter-spacing: -.025em;
+}
+
+.social small {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    color: #93889e;
+    font-size: 11px;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.github { --accent: #c4b5fd; }
+.telegram { --accent: #7dd3fc; }
+.steam { --accent: #a5b4fc; }
+.spotify { --accent: #86efac; }
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    color: #81768c;
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.footer-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,.10);
+}
+
+@supports not ((backdrop-filter: blur(1px))) {
+    .glass {
+        background: #191226;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 52px 0;
+    }
+
+    .profile,
+    .links-panel {
+        min-height: auto;
+    }
+
+    .profile {
+        padding-bottom: 38px;
+    }
+
+    .links-panel {
+        padding-top: 24px;
+    }
+}
+
+@media (max-width: 560px) {
+    .page {
+        width: min(100% - 28px, 480px);
+        padding-top: 18px;
+    }
+
+    .nav-meta {
+        display: none;
+    }
+
+    .hero {
+        gap: 14px;
+        padding: 38px 0 28px;
+    }
+
+    .profile,
+    .links-panel {
+        border-radius: 25px;
+    }
+
+    .profile {
+        padding: 26px;
+    }
+
+    .avatar-shell {
+        width: 102px;
+        height: 102px;
+        margin: 34px 0 27px;
+    }
+
+    .avatar {
+        width: 102px;
+        height: 102px;
+        border-radius: 29px;
+        font-size: 38px;
+    }
+
+    h1 {
+        font-size: clamp(3.8rem, 20vw, 5rem);
+    }
+
+    .profile-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .links-panel {
+        padding: 17px;
+    }
+
+    .links-heading {
+        padding: 12px 10px 22px;
+    }
+
+    .social-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .social {
+        min-height: 142px;
+    }
+
+    .footer-line {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+    <header class="nav">
+        <a class="brand" href="/" aria-label="Kinel">
+            <span class="brand-mark">K</span>
+            <span>Kinel</span>
+        </a>
+
+        <div class="nav-meta">
+            <i></i>
+            
+        </div>
+    </header>
+
+    <section class="hero">
+        <article class="profile glass">
+            <div>
+                <div class="eyebrow">
+                    <span></span>
+                    personal identity
+                </div>
+
+                <div class="avatar-shell">
+                    <div class="avatar">
+                        <span>K</span>
+                        <img src="avatar.png" alt="Kinel" onerror="this.remove()">
+                    </div>
+                </div>
+
+                <h1>Kinel</h1>
+                <p class="role">Designer &amp; Developer</p>
+                <div class="tags">
+                    <span class="tag">UI / UX</span>
+                    <span class="tag">Visual design</span>
+                    <span class="tag">Frontend</span>
+                </div>
+            </div>
+
+            <div class="profile-footer">
+                <span class="availability">
+                    <i></i>
+                    online
+                </span>
+                <span class="index">01 / 04</span>
+            </div>
+        </article>
+
+        <article class="links-panel glass">
+            <div class="links-heading">
+                <div class="section-label">Selected links</div>
+                <h2>Find me<br>elsewhere.</h2>
+            </div>
+
+            <div class="social-grid">
+                <a class="social github" href="https://github.com/kinelgoog" target="_blank" rel="noopener noreferrer">
+                    <div class="social-top">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.8 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.69.82.58A12 12 0 0 0 12 .5Z"/>
+                            </svg>
+                        </span>
+                        <span class="arrow">↗</span>
+                    </div>
+                    <div>
+                        <strong>GitHub</strong>
+                        <small>github.com/kinelgoog</small>
+                    </div>
+                </a>
+
+                <a class="social telegram" href="https://t.me/itskinel" target="_blank" rel="noopener noreferrer">
+                    <div class="social-top">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21.4 3.2 2.8 10.4c-1.27.5-1.26 1.2-.23 1.5l4.78 1.49 1.83 5.6c.22.61.11.85.75.85.49 0 .7-.22.96-.48l2.32-2.25 4.83 3.57c.89.49 1.53.23 1.75-.83l3.17-14.95c.33-1.3-.5-1.89-1.56-1.23Zm-13.3 9.77 10.95-6.9c.55-.33 1.06-.15.64.2l-8.86 8- .35 3.76-1.56-4.9-1.82-.16Z"/>
+                            </svg>
+                        </span>
+                        <span class="arrow">↗</span>
+                    </div>
+                    <div>
+                        <strong>Telegram</strong>
+                        <small>t.me/itskinel</small>
+                    </div>
+                </a>
+
+                <a class="social steam" href="https://steamcommunity.com/id/kn4w" target="_blank" rel="noopener noreferrer">
+                    <div class="social-top">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0a12 12 0 0 0-11.7 9.3l6.45 2.67a3.7 3.7 0 0 1 2.1-.65h.16l2.88-4.17v-.06a4.53 4.53 0 1 1 4.53 4.53h-.1l-4.1 2.93a3.4 3.4 0 1 1-6.7 1.02L.98 14.1A12 12 0 1 0 12 0Zm-3.1 18.5-1.47-.61a2 2 0 1 0 1.47.61ZM16.42 5.9a2.27 2.27 0 1 0 0 4.54 2.27 2.27 0 0 0 0-4.54Z"/>
+                            </svg>
+                        </span>
+                        <span class="arrow">↗</span>
+                    </div>
+                    <div>
+                        <strong>Steam</strong>
+                        <small>steamcommunity.com/id/kn4w</small>
+                    </div>
+                </a>
+
+                <a class="social spotify" href="https://open.spotify.com/user/31is5afgc5ywbgq56wgvlfxf7tbu" target="_blank" rel="noopener noreferrer">
+                    <div class="social-top">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1.5A10.5 10.5 0 1 0 12 22.5 10.5 10.5 0 0 0 12 1.5Zm4.82 15.15a.67.67 0 0 1-.92.23c-2.52-1.54-5.69-1.89-9.43-1.03a.67.67 0 1 1-.3-1.3c4.09-.94 7.6-.54 10.43 1.19.32.2.42.62.22.91Zm1.31-2.92a.84.84 0 0 1-1.16.28c-2.88-1.77-7.26-2.28-10.67-1.25a.84.84 0 1 1-.49-1.61c3.89-1.18 8.74-.61 12.04 1.42.4.24.52.76.28 1.16Zm.11-3.05c-3.45-2.05-9.14-2.24-12.43-1.24a1 1 0 1 1-.58-1.91c3.78-1.15 10.06-.92 14 1.42a1 1 0 1 1-.99 1.73Z"/>
+                            </svg>
+                        </span>
+                        <span class="arrow">↗</span>
+                    </div>
+                    <div>
+                        <strong>Spotify</strong>
+                        <small>open.spotify.com/user/kinel</small>
+                    </div>
+                </a>
+            </div>
+        </article>
+    </section>
+
+    <footer class="footer">
+        <span>© Kinel</span>
+        <span class="footer-line"></span>
+        <span>Designer / Developer</span>
+    </footer>
+</main>
+</body>
+</html>
