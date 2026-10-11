@@ -40,6 +40,38 @@ radial-gradient(520px 420px at 88% 0%,rgba(167,139,250,.1),transparent 60%),
 radial-gradient(820px 600px at 55% 115%,rgba(124,58,237,.12),transparent 65%),
 var(--bg);
 }
+.orb.a.moon {
+    overflow: hidden;
+    isolation: isolate;
+    background: #211d2b;
+    border: 1px solid rgba(196, 181, 253, .22);
+    box-shadow: 0 0 70px rgba(139, 92, 246, .12);
+}
+
+.moon img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .7;
+    filter: grayscale(1) brightness(.8) contrast(1.08);
+    mix-blend-mode: screen;
+}
+
+.moon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(ellipse at 30% 24%, rgba(255,255,255,.12) 0 3%, transparent 3.5%),
+        radial-gradient(ellipse at 68% 58%, rgba(0,0,0,.24) 0 7%, transparent 7.5%),
+        linear-gradient(110deg, transparent 34%, rgba(8,8,10,.72) 100%);
+    box-shadow:
+        inset -35px -8px 55px rgba(0,0,0,.72),
+        inset 8px 0 24px rgba(196,181,253,.13);
+}
 .bg::after{
 content:"";position:absolute;inset:0;
 background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
@@ -247,7 +279,9 @@ body{cursor:auto}
 <div class="grid" aria-hidden="true"></div>
 <div class="dots" aria-hidden="true"></div>
 <div class="maze" id="maze" aria-hidden="true"><div class="rings" id="rings"></div></div>
-<span class="orb a" aria-hidden="true"></span>
+<div class="orb a moon" aria-hidden="true">
+    <img src="avatar.png" alt="">
+</div>
 <span class="orb b" aria-hidden="true"></span>
 <span class="orb c" aria-hidden="true"></span>
 <div class="cur" aria-hidden="true"></div>
