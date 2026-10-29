@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050505">
-<title>Kinel</title>
+<title>kinel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
@@ -85,7 +85,6 @@ width:40px;height:40px;margin:-20px 0 0 -20px;border-color:#fff
 @media(pointer:fine){body.has-cur .cur{opacity:.8}}
 @media(pointer:coarse){.cur{display:none}}
 
-/* Header */
 .bar{
 display:flex;justify-content:space-between;align-items:center;
 padding:34px 0;
@@ -109,7 +108,6 @@ font-size:13px;color:var(--faint);
 font-variant-numeric:tabular-nums;letter-spacing:.02em;
 }
 
-/* Language switch */
 .lang{
 position:relative;
 display:grid;grid-template-columns:1fr 1fr;gap:2px;
@@ -149,7 +147,6 @@ opacity:.55;transition:opacity .3s,transform .4s var(--spring);
 .lang button[aria-pressed="true"] .flag{opacity:1}
 .lang button:hover .flag{transform:scale(1.12)}
 
-/* Main heading */
 .hero{
 flex:1;display:flex;flex-direction:column;justify-content:center;
 padding:55px 0 89px;
@@ -183,7 +180,6 @@ font-family:"Noto Sans JP","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
 font-weight:700;letter-spacing:.01em;font-size:.5em;
 }
 
-/* Links */
 .links{
 padding-bottom:55px;
 opacity:0;transform:translateY(14px);
@@ -226,8 +222,7 @@ transform:rotate(45deg);
 box-shadow:0 0 24px rgba(255,255,255,.12);
 }
 .links a:active .ar{transform:rotate(45deg) scale(.88)}
-
-/* Footer and background spheres */
+  
 .foot{
 display:flex;justify-content:space-between;align-items:center;
 padding:24px 0 30px;border-top:1px solid var(--line);
@@ -298,13 +293,6 @@ body{cursor:auto}
 <div class="cur" aria-hidden="true"></div>
 <div class="toast" id="toast"></div>
 
-<div class="wrap">
-<header class="bar">
-<a class="brand" href="#" id="brand"><i></i>Kinel</a>
-<div class="bar-r">
-<div class="lang" id="lang" data-l="en" role="group" aria-label="Language">
-<span class="pill" aria-hidden="true"></span>
-
 <button type="button" data-lang="en" aria-pressed="true" title="English">
 <span class="flag" aria-hidden="true">
 <svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice">
@@ -336,7 +324,7 @@ body{cursor:auto}
 
 <main class="hero">
 <h1>
-<span class="ln"><span>Kinel</span></span>
+<span class="ln"><span>kinel</span></span>
 <span class="ln role-ln"><span><span class="role-txt" id="roleTxt">graphic designer</span></span></span>
 </h1>
 </main>
@@ -354,11 +342,6 @@ body{cursor:auto}
 </ul>
 </nav>
 
-<footer class="foot">
-<span>© <span id="yr"></span> Kinel</span>
-</footer>
-</div>
-
 <script>
 (()=>{
 "use strict";
@@ -374,7 +357,6 @@ clearTimeout(tt);
 tt=setTimeout(()=>toastEl.classList.remove('show'),2600);
 };
 
-/* Language */
 const I18N={
 en:{role:'graphic designer'},
 ja:{role:'グラフィックデザイナー'}
