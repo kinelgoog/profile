@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050505">
+<title>kinel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#050505;
+--ink:#f5f5f5;
+--sub:#a5a5a5;
+--faint:#707070;
+--line:rgba(255,255,255,.14);
+--v1:#f5f5f5;
+--v2:#b8b8b8;
+--v3:#fff;
+--glow:rgba(255,255,255,.12);
+--ease:cubic-bezier(.22,.61,.2,1);
+--spring:cubic-bezier(.34,1.4,.4,1);
+--ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color-scheme:dark;-webkit-text-size-adjust:100%}
+body{
+min-height:100svh;
+font-family:Manrope,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+color:var(--ink);
+-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility;
+overflow-x:hidden;
+}
+@media(pointer:fine){body{cursor:none}}
+::selection{background:#f2f2f2;color:#050505}
+
+.bg{
+position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+background:#050505;
+}
+.bg::before{
+content:"";position:absolute;left:0;top:0;width:1040px;height:1040px;margin:-520px 0 0 -520px;
+background:radial-gradient(circle closest-side,rgba(255,255,255,.055),transparent 70%);
+transform:translate3d(var(--mx,50vw),var(--my,50vh),0);will-change:transform;
+}
+
+.orb.a.moon{
+overflow:hidden;
+isolation:isolate;
+background:#111;
+border:1px solid rgba(255,255,255,.18);
+box-shadow:0 0 70px rgba(255,255,255,.045);
+}
+.moon img{
+position:absolute;inset:0;width:100%;height:100%;
+object-fit:cover;opacity:.92;
+filter:grayscale(1) contrast(1.08) brightness(.84);
+mix-blend-mode:normal;
+}
+.moon::after{
+content:"";position:absolute;inset:0;border-radius:inherit;
+background:linear-gradient(110deg,transparent 28%,rgba(0,0,0,.74) 100%);
+box-shadow:inset -35px -8px 55px rgba(0,0,0,.72),
+inset 8px 0 24px rgba(255,255,255,.07);
+}
+.wrap{
+width:min(880px,calc(100% - 48px));
+margin:0 auto;min-height:100svh;
+display:flex;flex-direction:column;
+position:relative;z-index:2;
+}
+.cur{
+position:fixed;left:0;top:0;z-index:9999;pointer-events:none;
+width:22px;height:22px;margin:-11px 0 0 -11px;
+border:1px solid transparent;border-radius:50%;
+opacity:0;will-change:transform;
+transition:opacity .25s,border-color .3s,width .28s var(--spring),height .28s var(--spring),margin .28s var(--spring);
+}
+.cur::before,.cur::after{
+content:"";position:absolute;background:#fff;transition:opacity .25s
+}
+.cur::before{left:50%;top:0;width:1px;height:100%}
+.cur::after{top:50%;left:0;height:1px;width:100%}
+.cur.hov{
+width:40px;height:40px;margin:-20px 0 0 -20px;border-color:#fff
+}
+.cur.hov::before,.cur.hov::after{opacity:0}
+@media(pointer:fine){body.has-cur .cur{opacity:.8}}
+@media(pointer:coarse){.cur{display:none}}
+
+.bar{
+display:flex;justify-content:flex-end;align-items:center;
+padding:34px 0;
+opacity:0;transform:translateY(-8px);
+animation:rise 1.2s var(--ease-out) .6s forwards;
+}
+.bar-r{display:flex;align-items:center;gap:20px}
+.tm{
+font-size:13px;color:var(--faint);
+font-variant-numeric:tabular-nums;letter-spacing:.02em;
+}
+
+.lang{
+position:relative;
+display:grid;grid-template-columns:1fr 1fr;gap:2px;
+padding:3px;border-radius:100px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.03);
+backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.lang .pill{
+position:absolute;top:3px;bottom:3px;left:3px;
+width:calc(50% - 4px);border-radius:100px;
+background:rgba(255,255,255,.10);
+border:1px solid rgba(255,255,255,.24);
+box-shadow:0 0 18px rgba(255,255,255,.05);
+transition:transform .45s var(--spring);
+}
+.lang[data-l="ja"] .pill{transform:translateX(calc(100% + 2px))}
+.lang button{
+position:relative;z-index:1;
+display:flex;align-items:center;justify-content:center;gap:7px;
+padding:6px 12px 6px 8px;
+border:0;background:none;border-radius:100px;
+font-family:inherit;font-size:12px;font-weight:500;letter-spacing:.06em;
+color:var(--faint);cursor:pointer;
+transition:color .3s;
+}
+@media(pointer:fine){.lang button{cursor:none}}
+.lang button:hover{color:var(--sub)}
+.lang button[aria-pressed="true"]{color:var(--ink)}
+.lang button:focus-visible{outline:1px solid #fff;outline-offset:2px}
+.flag{
+width:18px;height:12px;border-radius:2px;overflow:hidden;display:block;
+box-shadow:0 0 0 1px rgba(255,255,255,.14);
+opacity:.55;transition:opacity .3s,transform .4s var(--spring);
+}
+.flag svg{width:100%;height:100%;display:block}
+.lang button[aria-pressed="true"] .flag{opacity:1}
+.lang button:hover .flag{transform:scale(1.12)}
+
+.hero{
+flex:1;display:flex;flex-direction:column;justify-content:center;
+padding:55px 0 89px;
+}
+h1{
+font-size:clamp(48px,8.8vw,96px);
+font-weight:600;letter-spacing:-.045em;line-height:1.04;
+margin-left:-.03em;
+}
+h1 .ln{display:block}
+h1 .ln>span{display:block}
+.ch{display:inline-block;font-style:normal;opacity:0;animation:blurin 1.5s var(--ease-out) calc(.3s + var(--i)*.09s) forwards}
+h1 .role-ln>span{animation:blurin 1.5s var(--ease-out) 1.05s both}
+@keyframes blurin{from{opacity:0;filter:blur(20px);transform:translateY(.3em) scale(1.06)}to{opacity:1;filter:none;transform:none}}
+h1 .role-ln{margin-top:.08em}
+h1 .role-ln>span{line-height:1.2}
+.role-txt{
+display:inline-block;
+font-size:.56em;font-weight:600;letter-spacing:-.035em;
+padding:0 .04em .1em 0;
+background:linear-gradient(95deg,#8f5cff 0%,#c44dff 28%,#f0abfc 50%,#b18cff 75%,#8f5cff 100%);
+background-size:220% 100%;animation:sheen 7s ease-in-out infinite;
+-webkit-background-clip:text;background-clip:text;
+-webkit-text-fill-color:transparent;color:transparent;
+transition:opacity .25s var(--ease),transform .4s var(--ease),filter .35s var(--ease);
+}
+.role-txt.swap{opacity:0;transform:translateY(.35em);filter:blur(8px)}
+html[lang="ja"] .role-txt{
+font-family:-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+font-weight:700;letter-spacing:.01em;font-size:.5em;
+}
+
+.links{padding-bottom:55px}
+.links ul{list-style:none;display:flex;flex-direction:column;gap:2px}
+.links li{opacity:0;transform:translateY(18px);animation:rise 1.2s var(--ease-out) forwards}
+.links li:nth-child(1){animation-delay:1.6s}
+.links li:nth-child(2){animation-delay:1.72s}
+.links li:nth-child(3){animation-delay:1.84s}
+.links li:nth-child(4){animation-delay:1.96s}
+.links li+li{border-top:1px solid rgba(255,255,255,.09);transition:border-color .35s var(--ease)}
+.links li:hover,.links li:hover+li{border-top-color:transparent}
+.links a{
+display:flex;align-items:center;gap:16px;
+padding:17px 16px;margin:0 -16px;border-radius:16px;
+text-decoration:none;color:var(--ink);position:relative;isolation:isolate;
+}
+.links a::before{
+content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+background:rgba(255,255,255,.055);
+opacity:0;transform:scale(.97);
+transition:opacity .35s var(--ease),transform .55s var(--spring);
+}
+.links a:hover::before{opacity:1;transform:none}
+.t{font-size:19px;font-weight:500;letter-spacing:-.02em;flex:1;transition:transform .55s var(--spring)}
+.links a:hover .t{transform:translateX(6px)}
+.u{font-size:13px;color:var(--faint);transition:color .3s}
+.ar{
+width:34px;height:34px;border-radius:50%;
+border:1px solid var(--line);
+display:grid;place-items:center;
+font-size:15px;color:var(--sub);
+transition:all .35s var(--spring);
+}
+.links a:hover .u{color:#ddd}
+.links a:hover .ar{
+background:#f1f1f1;border-color:#f1f1f1;color:#050505;
+transform:rotate(45deg);
+box-shadow:0 0 24px rgba(255,255,255,.12);
+}
+.links a:active .ar{transform:rotate(45deg) scale(.88)}
+.orb{
+position:fixed;border-radius:50%;z-index:1;pointer-events:none;
+background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.10),rgba(255,255,255,.035) 45%,rgba(255,255,255,.01) 72%);
+border:1px solid rgba(255,255,255,.09);
+will-change:transform;
+}
+.orb.a{width:320px;height:320px;right:-6%;top:14%;animation:moonin 2.8s var(--ease-out) .1s both,float 11s ease-in-out infinite alternate both}
+
+.toast{
+position:fixed;left:50%;bottom:26px;
+transform:translateX(-50%) translateY(16px);
+z-index:500;pointer-events:none;
+background:rgba(20,20,20,.92);color:var(--ink);
+backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.18);
+font-size:13px;font-weight:500;letter-spacing:.01em;
+padding:11px 20px;border-radius:100px;
+opacity:0;transition:opacity .3s var(--ease),transform .35s var(--spring);
+white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti{
+position:fixed;top:-12px;z-index:400;pointer-events:none;
+width:7px;height:11px;border-radius:2px;
+animation:fall linear forwards;
+}
+@keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
+@keyframes rise{from{filter:blur(12px)}to{opacity:1;transform:none;filter:none}}
+@keyframes moonin{from{opacity:0;scale:.78;filter:blur(32px)}to{opacity:1;scale:1;filter:blur(0)}}
+@keyframes float{from{translate:0 -12px}to{translate:0 14px}}
+@keyframes sheen{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+@media(min-width:1024px){
+.wrap{width:min(1120px,calc(100% - 128px))}
+h1{font-size:clamp(72px,7.2vw,124px)}
+.links ul{max-width:520px}
+.orb.a{width:min(420px,30vw);height:min(420px,30vw);right:max(64px,calc((100vw - 1120px)/2));top:50%;margin-top:calc(min(420px,30vw) / -2)}
+}
+
+@media(min-width:1024px) and (max-height:800px){
+.bar{padding:24px 0}
+.hero{padding:20px 0 28px}
+h1{font-size:clamp(64px,min(7.2vw,12vh),124px)}
+.links{padding-bottom:32px}
+.links a{padding:13px 16px}
+}
+@media(max-width:640px){
+.wrap{width:calc(100% - 40px)}
+.u{display:none}
+.hero{padding:44px 0 64px}
+.orb.a{width:220px;height:220px}
+.bar-r{gap:14px}
+.role-txt{font-size:.6em}
+}
+@media(max-width:380px){.tm{display:none}}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{
+animation-duration:.01ms!important;
+animation-iteration-count:1!important;
+transition-duration:.01ms!important
+}
+body{cursor:auto}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+
+<div class="orb a moon" aria-hidden="true">
+<img src="avatar.webp" alt="" width="900" height="900" decoding="async" fetchpriority="high">
+</div>
+<div class="cur" aria-hidden="true"></div>
+<div class="toast" id="toast"></div>
+
+<div class="wrap">
+<header class="bar">
+<div class="bar-r">
+<div class="lang" id="lang" data-l="en" role="group" aria-label="Language">
+<span class="pill" aria-hidden="true"></span>
+  
+<button type="button" data-lang="en" aria-pressed="true" title="English">
+<span class="flag" aria-hidden="true">
+<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice">
+<clipPath id="uk-s"><path d="M0,0v30h60V0z"/></clipPath>
+<clipPath id="uk-t"><path d="M30,15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
+<g clip-path="url(#uk-s)">
+<path d="M0,0v30h60V0z" fill="#012169"/>
+<path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/>
+<path d="M0,0L60,30M60,0L0,30" clip-path="url(#uk-t)" stroke="#C8102E" stroke-width="4"/>
+<path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/>
+<path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/>
+</g>
+</svg>
+</span>en
+</button>
+
+<button type="button" data-lang="ja" aria-pressed="false" title="日本語">
+<span class="flag" aria-hidden="true">
+<svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice">
+<rect width="30" height="20" fill="#fff"/>
+<circle cx="15" cy="10" r="6" fill="#BC002D"/>
+</svg>
+</span>jp
+</button>
+</div>
+<span class="tm" id="clock">--:--</span>
+</div>
+</header>
+
+<main class="hero">
+<h1>
+<span class="ln"><span><i class="ch" style="--i:0">k</i><i class="ch" style="--i:1">i</i><i class="ch" style="--i:2">n</i><i class="ch" style="--i:3">e</i><i class="ch" style="--i:4">l</i></span></span>
+<span class="ln role-ln"><span><span class="role-txt" id="roleTxt">graphic designer</span></span></span>
+</h1>
+</main>
+
+<nav class="links" aria-label="Links">
+<ul>
+<li><a href="https://github.com/kinelgoog" target="_blank" rel="noopener">
+<span class="t">github</span><span class="u">kinelgoog</span><span class="ar">↗</span></a></li>
+<li><a href="https://t.me/itskinel" target="_blank" rel="noopener">
+<span class="t">telegram</span><span class="u">itskinel</span><span class="ar">↗</span></a></li>
+<li><a href="https://steamcommunity.com/id/kn4w" target="_blank" rel="noopener">
+<span class="t">steam</span><span class="u">kn4w</span><span class="ar">↗</span></a></li>
+<li><a href="https://open.spotify.com/user/31is5afgc5ywbgq56wgvlfxf7tbu" target="_blank" rel="noopener">
+<span class="t">spotify:3</span><span class="u">kinelya</span><span class="ar">↗</span></a></li>
+</ul>
+</nav>
+
+<script>
+(()=>{
+"use strict";
+const d=document,b=d.body,$=s=>d.querySelector(s),$$=s=>[...d.querySelectorAll(s)];
+const fine=matchMedia('(pointer:fine)').matches;
+const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+const toastEl=$('#toast');let tt;
+const toast=m=>{
+toastEl.textContent=m;
+toastEl.classList.add('show');
+clearTimeout(tt);
+tt=setTimeout(()=>toastEl.classList.remove('show'),2600);
+};
+
+const I18N={
+en:{role:'graphic designer'},
+ja:{role:'グラフィックデザイナー'}
+};
+const langEl=$('#lang'),roleTxt=$('#roleTxt'),langBtns=$$('.lang button');
+let lang='en';
+try{lang=localStorage.getItem('kinel-lang')||'en'}catch(e){}
+
+const setLang=(l,anim)=>{
+if(!I18N[l])l='en';
+lang=l;
+d.documentElement.lang=l;
+langEl.dataset.l=l;
+langBtns.forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.lang===l));
+const apply=()=>{roleTxt.textContent=I18N[l].role};
+if(anim&&!rm){
+roleTxt.classList.add('swap');
+setTimeout(()=>{
+apply();
+roleTxt.classList.remove('swap');
+},240);
+}else apply();
+try{localStorage.setItem('kinel-lang',l)}catch(e){}
+};
+
+langBtns.forEach(btn=>btn.addEventListener('click',()=>{
+if(btn.dataset.lang!==lang)setLang(btn.dataset.lang,true);
+}));
+setLang(lang,false);
+
+let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+const orb=$('.orb'),bg=$('.bg');
+
+d.addEventListener('mousemove',e=>{
+mx=e.clientX;my=e.clientY;
+b.classList.add('has-cur');wake();
+},{passive:true});
+
+const cur=$('.cur');
+d.addEventListener('mouseover',e=>{
+cur.classList.toggle('hov',!!e.target.closest('a,button'));
+});
+
+let raf=0;
+function loop(){
+cx+=(mx-cx)*.16;
+cy+=(my-cy)*.16;
+cur.style.transform=`translate3d(${cx}px,${cy}px,0)`;
+
+if(!rm&&fine){
+const nx=mx/innerWidth-.5,ny=my/innerHeight-.5;
+bg.style.setProperty('--mx',cx+'px');bg.style.setProperty('--my',cy+'px');
+orb.style.transform=`translate(${nx*-36}px,${ny*-28}px)`;
+}
+raf=Math.abs(mx-cx)>.05||Math.abs(my-cy)>.05?requestAnimationFrame(loop):0;
+}
+const wake=()=>{if(!raf)raf=requestAnimationFrame(loop)};
+loop();
+
+const clock=$('#clock');
+const tick=()=>{
+clock.textContent=new Date().toLocaleTimeString('ru-RU',{
+hour:'2-digit',minute:'2-digit'
+});
+};
+tick();
+setInterval(tick,15000);
+
+const TITLE=d.title;
+d.addEventListener('visibilitychange',()=>{
+d.title=d.hidden?'· kinel':TITLE;
+});
+
+const confetti=(n=26)=>{
+if(rm)return toast('✦');
+const cols=['#fff','#ddd','#aaa','#777','#f2f2f4'];
+
+for(let i=0;i<n;i++){
+const s=d.createElement('span');
+s.className='confetti';
+s.style.left=Math.random()*100+'vw';
+s.style.background=cols[i%cols.length];
+s.style.animationDuration=(1.4+Math.random()*1.6)+'s';
+b.appendChild(s);
+setTimeout(()=>s.remove(),3200);
+}
+};
+
+let buf='';
+
+d.addEventListener('keydown',e=>{
+if(e.metaKey||e.ctrlKey||e.altKey)return;
+const k=e.key.toLowerCase();
+if(/^[a-z]$/.test(k)){
+buf=(buf+k).slice(-14);
+if(buf.endsWith('kinel')){confetti();buf=''}
+if(buf.endsWith('design')){toast('you already see it');buf=''}
+if(buf.endsWith('help')){toast('try: kinel');buf=''}
+}
+});
+
+$$('.links a').forEach(a=>{
+a.addEventListener('click',()=>toast('leaving so soon?'));
+});
+
+})();
+</script>
+</body>
+</html>
