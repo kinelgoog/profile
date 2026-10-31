@@ -313,7 +313,7 @@ body{cursor:auto}
 <path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/>
 </g>
 </svg>
-</span>EN
+</span>en
 </button>
 
 <button type="button" data-lang="ja" aria-pressed="false" title="日本語">
@@ -322,7 +322,7 @@ body{cursor:auto}
 <rect width="30" height="20" fill="#fff"/>
 <circle cx="15" cy="10" r="6" fill="#BC002D"/>
 </svg>
-</span>JP
+</span>jp
 </button>
 </div>
 <span class="tm" id="clock">--:--</span>
@@ -339,13 +339,13 @@ body{cursor:auto}
 <nav class="links" aria-label="Links">
 <ul>
 <li><a href="https://github.com/kinelgoog" target="_blank" rel="noopener">
-<span class="num">01</span><span class="t">GitHub</span><span class="u">kinelgoog</span><span class="ar">↗</span></a></li>
+<span class="num"> </span><span class="t">github</span><span class="u">kinelgoog</span><span class="ar">↗</span></a></li>
 <li><a href="https://t.me/itskinel" target="_blank" rel="noopener">
-<span class="num">02</span><span class="t">Telegram</span><span class="u">itskinel</span><span class="ar">↗</span></a></li>
+<span class="num"> </span><span class="t">telegram</span><span class="u">itskinel</span><span class="ar">↗</span></a></li>
 <li><a href="https://steamcommunity.com/id/kn4w" target="_blank" rel="noopener">
-<span class="num">03</span><span class="t">Steam</span><span class="u">kn4w</span><span class="ar">↗</span></a></li>
+<span class="num"> </span><span class="t">steam</span><span class="u">kn4w</span><span class="ar">↗</span></a></li>
 <li><a href="https://open.spotify.com/user/31is5afgc5ywbgq56wgvlfxf7tbu" target="_blank" rel="noopener">
-<span class="num">04</span><span class="t">Spotify</span><span class="u">kinelya</span><span class="ar">↗</span></a></li>
+<span class="num"> </span><span class="t">spotify:3</span><span class="u">kinelya</span><span class="ar">↗</span></a></li>
 </ul>
 </nav>
 
@@ -394,7 +394,6 @@ if(btn.dataset.lang!==lang)setLang(btn.dataset.lang,true);
 }));
 setLang(lang,false);
 
-/* Cursor and parallax */
 let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
 const orbs=$$('.orb'),rings=$('#rings');
 
@@ -422,7 +421,6 @@ orbs[2].style.transform=`translate(${nx*-14}px,${ny*26}px)`;
 requestAnimationFrame(loop);
 })();
 
-/* Clock and year */
 const clock=$('#clock');
 const tick=()=>{
 clock.textContent=new Date().toLocaleTimeString('ru-RU',{
@@ -438,7 +436,6 @@ d.addEventListener('visibilitychange',()=>{
 d.title=d.hidden?'· kinel':TITLE;
 });
 
-/* Easter egg */
 const confetti=(n=26)=>{
 if(rm)return toast('✦');
 const cols=['#fff','#ddd','#aaa','#777','#f2f2f4'];
